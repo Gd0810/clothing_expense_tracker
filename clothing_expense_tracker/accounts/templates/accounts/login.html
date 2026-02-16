@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<style>
+    .helptext {
+        display: none !important;
+    }
+    
+    /* Custom input styling */
+    .form-input {
+        @apply w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-800 placeholder-gray-400 transition-all duration-300 ease-in-out;
+    }
+    
+    .form-input:focus {
+        @apply border-indigo-500 bg-white shadow-lg ring-4 ring-indigo-100 outline-none transform scale-105;
+    }
+    
+    .form-input:hover {
+        @apply border-gray-300 bg-white;
+    }
+    
+    .form-input.error {
+        @apply border-red-400 bg-red-50 ring-4 ring-red-100;
+    }
+    
+    /* Floating animation */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .floating {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    /* Gradient text */
+    .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Pulse animation for login icon */
+    @keyframes pulse-scale {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .pulse-scale {
+        animation: pulse-scale 3s ease-in-out infinite;
+    }
+</style>
+
+<!-- Background with animated elements -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 relative overflow-hidden">
+    <!-- Animated background elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20 floating"></div>
+        <div class="absolute top-1/4 -right-16 w-32 h-32 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full opacity-20 floating" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-r from-green-400 to-blue-400 rounded-full opacity-20 floating" style="animation-delay: -4s;"></div>
+    </div>
+
+    <div class="relative z-10 py-12 px-4">
+        <div class="max-w-md mx-auto">
+            
+            <!-- Main Form Container -->
+            <div class="bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/20 relative overflow-hidden">
+                
+                <!-- Decorative gradient overlay -->
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                
+                <!-- Header Section -->
+                <div class="text-center mb-8">
+                    <!-- Login Icon -->
+                    <div class="mx-auto w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300 pulse-scale">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                    </div>
+                    
+                    <h1 class="text-4xl font-black gradient-text mb-3">Welcome Back</h1>
+                    <p class="text-gray-600 text-base font-medium">Sign in to access your dashboard and manage your shops</p>
+                    
+                    <!-- Status indicator for login -->
+                    <div class="flex justify-center mt-4">
+                        <div class="flex space-x-2">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                            <div class="w-2 h-2 bg-emerald-300 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-5">
+                        {% for field in form %}
+    <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+        </label>
+        <input
+            type="{{ field.field.widget.input_type }}"
+            name="{{ field.html_name }}"
+            id="{{ field.id_for_label }}"
+            value="{{ field.value|default_if_none:'' }}"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            {% if field.field.required %} required {% endif %}
+            {% if field.field.widget.attrs.maxlength %} maxlength="{{ field.field.widget.attrs.maxlength }}" {% endif %}
+        >
+        {% if field.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ field.errors.0 }}</p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+                    </div>
+
+                    <!-- Forgot Password Link -->
+                    {% comment %} <div class="flex justify-end">
+                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium hover:underline transition-colors duration-200">
+                            Forgot your password?
+                        </a>
+                    </div> {% endcomment %}
+
+                    <!-- Submit Button with enhanced styling -->
+                    <div class="pt-2">
+                        <button type="submit" class="group relative w-full py-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 text-white text-base font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+                            <span class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            <span class="relative flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                </svg>
+                                Sign In to Dashboard
+                            </span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Divider -->
+                <div class="relative my-8">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-white text-gray-500 font-medium">or</span>
+                    </div>
+                </div>
+
+                <!-- Social Login Options (Optional) -->
+                {% comment %} <div class="grid grid-cols-2 gap-3 mb-6">
+                    <button type="button" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
+                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                            <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </button>
+                    <button type="button" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="#1877f2" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                </div> {% endcomment %}
+
+                <!-- Register Link with enhanced styling -->
+                <div class="text-center">
+                    <p class="text-gray-600 text-base">
+                        New to our platform?
+                        <a href="{% url 'register' %}" class="inline-flex items-center text-indigo-600 font-bold hover:text-indigo-800 transition-colors duration-200 group ml-2">
+                            <span class="border-b-2 border-transparent group-hover:border-indigo-600 transition-colors duration-200">
+                                Create an account
+                            </span>
+                            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Trust indicators -->
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <div class="flex justify-center items-center space-x-4 text-xs text-gray-500">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>SSL Secured</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Safe Login</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                            </svg>
+                            <span>Dashboard Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

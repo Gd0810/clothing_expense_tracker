@@ -1,0 +1,17 @@
+{% load crispy_forms_field %}
+
+<form method="{{ form_method }}" {% if form_id %}id="{{ form_id }}"{% endif %} {% if form_class %}class="{{ form_class }}"{% endif %} {% if form_action %}action="{{ form_action }}"{% endif %}>
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-4">
+            {% if field.label %}
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+            {% endif %}
+            {% crispy_field field %}
+            {% if field.errors %}
+                <p class="text-red-500 text-sm">{{ field.errors }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {{ form.non_field_errors }}
+</form>

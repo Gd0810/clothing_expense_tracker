@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% block title %}Shops{% endblock %}
+{% block content %}
+
+<!-- Background with gradient -->
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white shadow-2xl mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                            Your Shops
+                        </h1>
+                        <p class="text-purple-100 text-lg mt-1">Manage your clothing store collection</p>
+                    </div>
+                </div>
+                
+                <!-- Add New Shop Button -->
+                <a href="{% url 'shop_create' %}" 
+                   class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 backdrop-blur-sm">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    <span>Add New Shop</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-r from-green-400 to-emerald-500 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Total Shops</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ shops|length }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-r from-blue-400 to-indigo-500 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Active Stores</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ shops|length }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-r from-purple-400 to-pink-500 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Categories</p>
+                        <p class="text-2xl font-bold text-gray-800">All</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shops Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for shop in shops %}
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+                    
+                    <!-- Shop Header -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-white bg-opacity-20 p-2 rounded-full">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/>
+                                    </svg>
+                                </div>
+                                <h2 class="text-xl font-bold truncate">{{ shop.name }}</h2>
+                            </div>
+                            <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+                                <span class="text-xs font-medium">Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shop Content -->
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            
+                            <!-- Description -->
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-500 mb-2 flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                                    </svg>
+                                    <span>Description</span>
+                                </h3>
+                                <p class="text-gray-700 text-sm leading-relaxed">
+                                    {% if shop.description %}
+                                        {{ shop.description }}
+                                    {% else %}
+                                        <span class="text-gray-400 italic">No description provided</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <!-- Created Date -->
+                            <div class="flex items-center space-x-2 text-sm text-gray-500">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                                </svg>
+                                <span>Created: {{ shop.created_at|date:"F d, Y" }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Shop Actions -->
+                    {% comment %} <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <a href="#" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center space-x-1 hover:underline transition-colors duration-200">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </svg>
+                                    <span>Edit</span>
+                                </a>
+                                <span class="text-gray-300">|</span>
+                                <a href="#" 
+                                   class="text-red-600 hover:text-red-800 font-medium text-sm flex items-center space-x-1 hover:underline transition-colors duration-200">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                    <span>Delete</span>
+                                </a>
+                            </div>
+                            
+                            <!-- View Details Button -->
+                            <button class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                </svg>
+                                <span>View</span>
+                            </button>
+                        </div>
+                    </div> {% endcomment %}
+
+                </div>
+            {% empty %}
+                <!-- Empty State -->
+                <div class="col-span-full">
+                    <div class="bg-white rounded-2xl p-12 text-center shadow-xl border border-gray-100">
+                        <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">No shops found</h3>
+                        <p class="text-gray-500 mb-8 max-w-md mx-auto">
+                            Get started by creating your first shop. You can track expenses and manage your clothing store information easily.
+                        </p>
+                        <a href="{% url 'shop_create' %}" 
+                           class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            <span>Create Your First Shop</span>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% comment %} <!-- Quick Actions Footer -->
+        {% if shops %}
+        <div class="mt-12 bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-r from-green-400 to-emerald-500 p-2 rounded-full">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Quick Actions</h3>
+                        <p class="text-sm text-gray-500">Manage all your shops efficiently</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                        </svg>
+                        <span>Sort</span>
+                    </button>
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        <span>Search</span>
+                    </button>
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                        </svg>
+                        <span>Filter</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %} {% endcomment %}
+
+    </div>
+</div>
+
+{% endblock %}
